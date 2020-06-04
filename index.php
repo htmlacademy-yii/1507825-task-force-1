@@ -22,4 +22,3 @@ $tests = [
 foreach($tests as $i => $test){
     echo ($i + 1). ') test is ' . ($test ? 'successful' : 'failed') . '<br>';
 }
-
