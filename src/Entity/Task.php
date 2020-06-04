@@ -1,6 +1,8 @@
 <?php
 
+
 namespace TaskForce\Entity;
+
 
 class Task
 {
