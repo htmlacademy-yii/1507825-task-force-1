@@ -52,7 +52,11 @@ class Task
         return $this->status;
     }
 
-    public function perform($action): string
+    /**
+     * @param $action
+     * @return string|null
+     */
+    public function perform($action)
     {
         $availableActions = $this->getAvailableActions($this->status);
         if (!$availableActions && in_array($action, $availableActions, true)){
@@ -63,7 +67,7 @@ class Task
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
