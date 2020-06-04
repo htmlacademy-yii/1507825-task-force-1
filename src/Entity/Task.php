@@ -26,32 +26,71 @@ class Task
     /**
      * Entity params
      */
-    private $clientId = null;
-    private $executorId = null;
-    private $status = self::STATUS_NEW;
+    private $clientId;
+    private $executorId;
+    private $status;
 
     public function __construct(int $clientId, int $executorId)
     {
         $this->clientId = $clientId;
         $this->executorId = $executorId;
+        $this->status = self::STATUS_NEW;
+    }
+
+    public function getClientId(): int
+    {
+        return $this->clientId;
+    }
+
+    public function getExecutorId(): int
+    {
+        return $this->executorId;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function perform($action): string
+    {
+        $availableActions = $this->getAvailableActions($this->status);
+        if (!empty($availableActions) && in_array($action, $availableActions, true)){
+            $nextStatus = $this->getNextStatus($action);
+            if ($nextStatus){
+                $this->status = $nextStatus;
+                return $nextStatus;
+            }
+        }
+
+        return false;
     }
 
     public function getNextStatus($action): string
     {
-
-        if (!$this->status || !$action) return null;
+        if (!$this->status || !$action) {
+            return false;
+        }
 
         if ($this->status === self::STATUS_NEW){
-            if ($action === self::ACTION_ANSWER) return self::STATUS_IN_WORK;
-            if ($action === self::ACTION_CANCEL) return self::STATUS_CANCELED;
+            if ($action === self::ACTION_ANSWER) {
+                return self::STATUS_IN_WORK;
+            }
+            if ($action === self::ACTION_CANCEL) {
+                return self::STATUS_CANCELED;
+            }
         }
 
         if ($this->status === self::STATUS_IN_WORK){
-            if ($action === self::ACTION_COMPLETE) return self::STATUS_DONE;
-            if ($action === self::ACTION_REFUSE) return self::STATUS_FAILED;
+            if ($action === self::ACTION_COMPLETE) {
+                return self::STATUS_DONE;
+            }
+            if ($action === self::ACTION_REFUSE) {
+                return self::STATUS_FAILED;
+            }
         }
 
-        return null;
+        return false;
     }
 
     public function getAvailableActions($status): array
@@ -64,6 +103,6 @@ class Task
             return [self::ACTION_COMPLETE, self::ACTION_REFUSE];
         }
 
-        return null;
+        return [];
     }
 }
