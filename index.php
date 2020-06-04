@@ -19,10 +19,7 @@ $tests = [
             Task::ACTION_ANSWER, Task::ACTION_CANCEL
     ],
 ];
-
-$testCount = count($tests);
-$successTestCount = count(array_filter($tests));
-
-echo 'Success tests - '.$successTestCount."<br>";
-echo 'Failed tests - '.($testCount - $successTestCount)."<br>";
+foreach($tests as $i => $test){
+    echo ($i + 1). ') test is ' . ($test ? 'successful' : 'failed') . '<br>';
+}
 

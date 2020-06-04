@@ -59,7 +59,7 @@ class Task
     public function perform($action)
     {
         $availableActions = $this->getAvailableActions($this->status);
-        if (!$availableActions && in_array($action, $availableActions, true)){
+        if ($availableActions && in_array($action, $availableActions, true)){
             $nextStatus = $this->getNextStatus($action);
             if ($nextStatus){
                 $this->status = $nextStatus;
@@ -76,6 +76,7 @@ class Task
      */
     public function getNextStatus($action)
     {
+
         if (!$this->status || !$action) {
             return null;
         }
