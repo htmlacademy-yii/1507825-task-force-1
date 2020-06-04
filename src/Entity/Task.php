@@ -55,7 +55,7 @@ class Task
     public function perform($action): string
     {
         $availableActions = $this->getAvailableActions($this->status);
-        if (!empty($availableActions) && in_array($action, $availableActions, true)){
+        if (!$availableActions && in_array($action, $availableActions, true)){
             $nextStatus = $this->getNextStatus($action);
             if ($nextStatus){
                 $this->status = $nextStatus;
@@ -66,10 +66,14 @@ class Task
         return false;
     }
 
-    public function getNextStatus($action): string
+    /**
+     * @param $action
+     * @return string|null
+     */
+    public function getNextStatus($action)
     {
         if (!$this->status || !$action) {
-            return false;
+            return null;
         }
 
         if ($this->status === self::STATUS_NEW){
@@ -90,7 +94,7 @@ class Task
             }
         }
 
-        return false;
+        return null;
     }
 
     public function getAvailableActions($status): array
