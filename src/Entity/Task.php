@@ -56,7 +56,7 @@ class Task
      * @param $action
      * @return string|null
      */
-    public function perform($action)
+    public function perform(string $action): ?string
     {
         $availableActions = $this->getAvailableActions($this->status);
         if ($availableActions && in_array($action, $availableActions, true)){
@@ -74,7 +74,7 @@ class Task
      * @param $action
      * @return string|null
      */
-    public function getNextStatus($action)
+    public function getNextStatus(string $action): ?string
     {
 
         if (!$this->status || !$action) {
@@ -102,7 +102,7 @@ class Task
         return null;
     }
 
-    public function getAvailableActions($status): array
+    public function getAvailableActions(string $status): ?array
     {
         if ($status === self::STATUS_NEW){
             return [self::ACTION_ANSWER, self::ACTION_CANCEL];
@@ -112,6 +112,6 @@ class Task
             return [self::ACTION_COMPLETE, self::ACTION_REFUSE];
         }
 
-        return [];
+        return null;
     }
 }
