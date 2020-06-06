@@ -9,19 +9,19 @@ class Task
     /**
      * Statuses
      */
-    const STATUS_NEW = 'new';
-    const STATUS_CANCELED = 'canceled';
-    const STATUS_IN_WORK = 'in_work';
-    const STATUS_DONE = 'done';
-    const STATUS_FAILED = 'failed';
+    public const STATUS_NEW = 'new';
+    public const STATUS_CANCELED = 'canceled';
+    public const STATUS_IN_WORK = 'in_work';
+    public const STATUS_DONE = 'done';
+    public const STATUS_FAILED = 'failed';
 
     /**
      * Actions
      */
-    const ACTION_CANCEL = 'cancel';
-    const ACTION_ANSWER = 'answer';
-    const ACTION_COMPLETE = 'complete';
-    const ACTION_REFUSE = 'refuse';
+    public const ACTION_CANCEL = 'cancel';
+    public const ACTION_ANSWER = 'answer';
+    public const ACTION_COMPLETE = 'complete';
+    public const ACTION_REFUSE = 'refuse';
 
     /**
      * Entity params
