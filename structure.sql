@@ -13,9 +13,6 @@ CREATE TABLE `user`
     `avatar`          int,
     `date_of_birth`   datetime            NOT NULL,
     `city`            int,
-    `phone`           int,
-    `skype`           int,
-    `telegram`        int,
     `show_for_client` boolean                      DEFAULT true,
     `show`            boolean                      DEFAULT true
 );
@@ -30,6 +27,7 @@ CREATE TABLE `user_contact`
 (
     `id`    int PRIMARY KEY AUTO_INCREMENT,
     `type`  int          NOT NULL,
+    `user`  int          NOT NULL,
     `value` varchar(255) NOT NULL
 );
 
@@ -165,14 +163,8 @@ CREATE TABLE `favorite_user`
 ALTER TABLE `user_contact`
     ADD FOREIGN KEY (`type`) REFERENCES `user_contact_type` (`id`);
 
-ALTER TABLE `user`
-    ADD FOREIGN KEY (`phone`) REFERENCES `user_contact` (`id`);
-
-ALTER TABLE `user`
-    ADD FOREIGN KEY (`skype`) REFERENCES `user_contact` (`id`);
-
-ALTER TABLE `user`
-    ADD FOREIGN KEY (`telegram`) REFERENCES `user_contact` (`id`);
+ALTER TABLE `user_contact`
+    ADD FOREIGN KEY (`user`) REFERENCES `user` (`id`);
 
 ALTER TABLE `user`
     ADD FOREIGN KEY (`user_role`) REFERENCES `user_role` (`id`);
