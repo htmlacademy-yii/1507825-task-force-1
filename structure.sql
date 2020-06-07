@@ -6,8 +6,8 @@ CREATE TABLE `user`
     `last_name`       varchar(255)        NOT NULL,
     `user_role`       int                 NOT NULL,
     `password`        varchar(255)        NOT NULL,
-    `created_at`      datetime            NOT NULL DEFAULT (now()),
-    `last_active`     datetime            NOT NULL DEFAULT (now()),
+    `created_at`      datetime            NOT NULL DEFAULT now(),
+    `last_active`     datetime            NOT NULL DEFAULT now(),
     `rating`          float               NOT NULL DEFAULT 0,
     `biography`       text,
     `avatar`          int,
@@ -53,7 +53,7 @@ CREATE TABLE `task`
     `city`        int,
     `client`      int          NOT NULL,
     `executor`    int,
-    `created_at`  datetime     NOT NULL DEFAULT (now())
+    `created_at`  datetime     NOT NULL DEFAULT now()
 );
 
 CREATE TABLE `task_status`
@@ -88,13 +88,13 @@ CREATE TABLE `answer`
     `description` text,
     `budget`      float    NOT NULL,
     `task`        int      NOT NULL,
-    `created_at`  datetime NOT NULL DEFAULT (now())
+    `created_at`  datetime NOT NULL DEFAULT now()
 );
 
 CREATE TABLE `notification`
 (
     `id`         int PRIMARY KEY AUTO_INCREMENT,
-    `created_at` datetime NOT NULL DEFAULT (now()),
+    `created_at` datetime NOT NULL DEFAULT now(),
     `executed`   boolean  NOT NULL DEFAULT false,
     `type`       int      NOT NULL,
     `text`       text     NOT NULL,
@@ -121,7 +121,7 @@ CREATE TABLE `message`
     `user`       int      NOT NULL,
     `task`       int      NOT NULL,
     `text`       text     NOT NULL,
-    `created_at` datetime NOT NULL DEFAULT (now())
+    `created_at` datetime NOT NULL DEFAULT now()
 );
 
 CREATE TABLE `file`
@@ -150,7 +150,7 @@ CREATE TABLE `feedback`
     `id`         int PRIMARY KEY AUTO_INCREMENT,
     `text`       text     NOT NULL,
     `grade`      int      NOT NULL DEFAULT 3,
-    `created_at` datetime NOT NULL DEFAULT (now()),
+    `created_at` datetime NOT NULL DEFAULT now(),
     `task`       int      NOT NULL,
     `user`       int      NOT NULL
 );
