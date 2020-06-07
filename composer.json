@@ -1,0 +1,16 @@
+{
+  "name": "tkonstantin/taskforce",
+  "description": "html academy project",
+  "type": "project",
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "TaskForce\\": "src/"
+    }
+  },
+  "config": {
+    "platform": {
+      "php": "7.4.1"
+    }
+  }
+}

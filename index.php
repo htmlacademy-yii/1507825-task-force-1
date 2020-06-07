@@ -1,6 +1,6 @@
 <?php
 
-include_once('src/Entity/Task.php');
+include_once('vendor/autoload.php');
 
 use TaskForce\Entity\Task;
 
@@ -22,4 +22,3 @@ $tests = [
 foreach($tests as $i => $test){
     echo ($i + 1). ') test is ' . ($test ? 'successful' : 'failed') . '<br>';
 }
-
