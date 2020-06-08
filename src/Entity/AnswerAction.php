@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace TaskForce\Entity;
 
@@ -19,6 +20,6 @@ class AnswerAction extends Action
 
     public function checkAccess(int $executorId, int $clientId, int $currentUserId): bool
     {
-        return $currentUserId !== $clientId;
+        return $currentUserId === $executorId;
     }
 }
