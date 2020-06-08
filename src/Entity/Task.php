@@ -26,9 +26,9 @@ class Task
     /**
      * Entity params
      */
-    private $clientId;
-    private $executorId;
-    private $status;
+    private int $clientId;
+    private int $executorId;
+    private string $status;
 
     public function __construct(int $clientId, int $executorId)
     {
@@ -102,16 +102,26 @@ class Task
         return null;
     }
 
-    public function getAvailableActions(string $status): ?array
+    public function getAvailableActions(string $status, int $currentUserId): array
     {
+        $actions = [];
+
         if ($status === self::STATUS_NEW){
-            return [self::ACTION_ANSWER, self::ACTION_CANCEL];
+            $actions = [new AnswerAction(), new CancelAction()];
         }
 
         if ($status === self::STATUS_IN_WORK){
-            return [self::ACTION_COMPLETE, self::ACTION_REFUSE];
+            $actions = [new CompleteAction(), new RefuseAction()];
         }
 
-        return null;
+        $resultActions = [];
+
+        foreach ($actions as $action){
+            if ($action->checkAccess($this->executorId, $this->clientId, $currentUserId)){
+                $resultActions[] = $action;
+            }
+        }
+
+        return $resultActions;
     }
 }
