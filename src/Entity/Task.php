@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace TaskForce\Entity;
 
@@ -16,19 +17,11 @@ class Task
     public const STATUS_FAILED = 'failed';
 
     /**
-     * Actions
-     */
-    public const ACTION_CANCEL = 'cancel';
-    public const ACTION_ANSWER = 'answer';
-    public const ACTION_COMPLETE = 'complete';
-    public const ACTION_REFUSE = 'refuse';
-
-    /**
      * Entity params
      */
-    private $clientId;
-    private $executorId;
-    private $status;
+    private int $clientId;
+    private int $executorId;
+    private string $status;
 
     public function __construct(int $clientId, int $executorId)
     {
@@ -53,17 +46,21 @@ class Task
     }
 
     /**
-     * @param $action
+     * @param Action $action
+     * @param int $currentUserId
      * @return string|null
      */
-    public function perform(string $action): ?string
+    public function perform(Action $action, int $currentUserId): ?string
     {
-        $availableActions = $this->getAvailableActions($this->status);
-        if ($availableActions && in_array($action, $availableActions, true)){
-            $nextStatus = $this->getNextStatus($action);
-            if ($nextStatus){
-                $this->status = $nextStatus;
-                return $nextStatus;
+        $availableActions = $this->getAvailableActions($this->status, $currentUserId);
+
+        foreach ($availableActions as $possibleAction){
+            if ($possibleAction == $action) {
+                $nextStatus = $this->getNextStatus($action);
+                if ($nextStatus) {
+                    $this->status = $nextStatus;
+                    return $nextStatus;
+                }
             }
         }
 
@@ -74,27 +71,26 @@ class Task
      * @param $action
      * @return string|null
      */
-    public function getNextStatus(string $action): ?string
+    public function getNextStatus(Action $action): ?string
     {
-
         if (!$this->status || !$action) {
             return null;
         }
 
-        if ($this->status === self::STATUS_NEW){
-            if ($action === self::ACTION_ANSWER) {
+        if ($this->status === self::STATUS_NEW) {
+            if ($action instanceof AnswerAction) {
                 return self::STATUS_IN_WORK;
             }
-            if ($action === self::ACTION_CANCEL) {
+            if ($action instanceof CancelAction) {
                 return self::STATUS_CANCELED;
             }
         }
 
-        if ($this->status === self::STATUS_IN_WORK){
-            if ($action === self::ACTION_COMPLETE) {
+        if ($this->status === self::STATUS_IN_WORK) {
+            if ($action instanceof CompleteAction) {
                 return self::STATUS_DONE;
             }
-            if ($action === self::ACTION_REFUSE) {
+            if ($action instanceof RefuseAction) {
                 return self::STATUS_FAILED;
             }
         }
@@ -102,16 +98,26 @@ class Task
         return null;
     }
 
-    public function getAvailableActions(string $status): ?array
+    public function getAvailableActions(string $status, int $currentUserId): array
     {
-        if ($status === self::STATUS_NEW){
-            return [self::ACTION_ANSWER, self::ACTION_CANCEL];
+        $actions = [];
+
+        if ($status === self::STATUS_NEW) {
+            $actions = [new AnswerAction(), new CancelAction()];
         }
 
-        if ($status === self::STATUS_IN_WORK){
-            return [self::ACTION_COMPLETE, self::ACTION_REFUSE];
+        if ($status === self::STATUS_IN_WORK) {
+            $actions = [new CompleteAction(), new RefuseAction()];
         }
 
-        return null;
+        $resultActions = [];
+
+        foreach ($actions as $action) {
+            if ($action->checkAccess($this->executorId, $this->clientId, $currentUserId)) {
+                $resultActions[] = $action;
+            }
+        }
+
+        return $resultActions;
     }
 }
