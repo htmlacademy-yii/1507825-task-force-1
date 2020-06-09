@@ -28,6 +28,12 @@ class Task
     private string $status;
 
 
+    /**
+     * Task constructor.
+     * @param int $clientId
+     * @param int $executorId
+     * @throws NotValidUserException
+     */
     public function __construct(int $clientId, int $executorId)
     {
         if ($clientId <= 0 || $executorId <=0){
@@ -58,6 +64,8 @@ class Task
      * @param Action $action
      * @param int $currentUserId
      * @return string|null
+     * @throws NotValidActionException
+     * @throws NotValidUserException
      */
     public function perform(Action $action, int $currentUserId): ?string
     {
@@ -84,6 +92,12 @@ class Task
         return null;
     }
 
+    /**
+     * @param string $status
+     * @param int $currentUserId
+     * @return array
+     * @throws NotValidUserException
+     */
     public function getAvailableActions(string $status, int $currentUserId): array
     {
         if (!$this->isValidStatus($status)){
@@ -118,6 +132,7 @@ class Task
     /**
      * @param $action
      * @return string|null
+     * @throws NotValidActionException
      */
     public function getNextStatus(Action $action): ?string
     {
@@ -150,6 +165,10 @@ class Task
         return null;
     }
 
+    /**
+     * @param string $status
+     * @return bool
+     */
     private function isValidStatus(string $status): bool
     {
         return in_array($status, [
@@ -161,6 +180,10 @@ class Task
         ], true);
     }
 
+    /**
+     * @param Action $action
+     * @return bool
+     */
     private function isValidAction(Action $action): bool
     {
         return in_array($action, [
