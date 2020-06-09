@@ -15,30 +15,42 @@ $clientId = 2;
 $currentUserId = $executorId;
 $currentUserId1 = $clientId;
 
-$development = new Task($clientId, $executorId);
+try {
 
-$tests = [
-    $development->getNextStatus(new AnswerAction()) === Task::STATUS_IN_WORK,
-    $development->getNextStatus(new CancelAction()) === Task::STATUS_CANCELED,
-    $development->getAvailableActions(Task::STATUS_NEW, $currentUserId) == [
-        new AnswerAction()
-    ],
-    $development->getAvailableActions(Task::STATUS_NEW, $currentUserId1) == [
-        new CancelAction()
-    ],
-    $development->perform(new AnswerAction(), $currentUserId) === Task::STATUS_IN_WORK,
-    $development->getNextStatus(new CompleteAction()) === Task::STATUS_DONE,
-    $development->getNextStatus(new RefuseAction()) === Task::STATUS_FAILED,
-    $development->getAvailableActions(Task::STATUS_IN_WORK, $currentUserId) == [
-        new RefuseAction()
-    ],
-    $development->getAvailableActions(Task::STATUS_IN_WORK, $currentUserId1) == [
-        new CompleteAction()
-    ],
-    $development->getAvailableActions(Task::STATUS_IN_WORK, 10) === [],
-];
+    $development = new Task($clientId, $executorId);
+
+    $tests = [
+        $development->getNextStatus(new AnswerAction()) === Task::STATUS_IN_WORK,
+        $development->getNextStatus(new CancelAction()) === Task::STATUS_CANCELED,
+        $development->getAvailableActions(Task::STATUS_NEW, $currentUserId) == [
+            new AnswerAction()
+        ],
+        $development->getAvailableActions(Task::STATUS_NEW, $currentUserId1) == [
+            new CancelAction()
+        ],
+        $development->perform(new AnswerAction(), $currentUserId) === Task::STATUS_IN_WORK,
+        $development->getNextStatus(new CompleteAction()) === Task::STATUS_DONE,
+        $development->getNextStatus(new RefuseAction()) === Task::STATUS_FAILED,
+        $development->getAvailableActions(Task::STATUS_IN_WORK, $currentUserId) == [
+            new RefuseAction()
+        ],
+        $development->getAvailableActions(Task::STATUS_IN_WORK, $currentUserId1) == [
+            new CompleteAction()
+        ],
+        $development->getAvailableActions(Task::STATUS_IN_WORK, 10) === [],
+    ];
 
 
-foreach ($tests as $i => $test) {
-    echo ($i + 1) . ') test is ' . ($test ? 'successful' : 'failed') . '<br>';
+    foreach ($tests as $i => $test) {
+        echo ($i + 1) . ') test is ' . ($test ? 'successful' : 'failed') . '<br>';
+    }
+} catch (Exception $e) {
+    echo 'Couldnt check tests: ' . $e->getMessage() . ', in ' . $e->getFile() . ':' . $e->getLine();
+}
+
+
+try {
+    $development = new Task(-10, 0);
+} catch (Exception $e) {
+    echo 'Couldnt check tests: ' . $e->getMessage() . ', in ' . $e->getFile() . ':' . $e->getLine();
 }
