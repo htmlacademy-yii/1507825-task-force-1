@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace TaskForce\Entity;
 
 
+use Exception;
+use TaskForce\Exception\NotValidActionException;
+use TaskForce\Exception\NotValidUserException;
+
 class Task
 {
     /**
@@ -23,8 +27,19 @@ class Task
     private int $executorId;
     private string $status;
 
+
+    /**
+     * Task constructor.
+     * @param int $clientId
+     * @param int $executorId
+     * @throws NotValidUserException
+     */
     public function __construct(int $clientId, int $executorId)
     {
+        if ($clientId <= 0 || $executorId <=0){
+            throw new NotValidUserException('Not valid user id, cant create new Task');
+        }
+
         $this->clientId = $clientId;
         $this->executorId = $executorId;
         $this->status = self::STATUS_NEW;
@@ -49,12 +64,22 @@ class Task
      * @param Action $action
      * @param int $currentUserId
      * @return string|null
+     * @throws NotValidActionException
+     * @throws NotValidUserException
      */
     public function perform(Action $action, int $currentUserId): ?string
     {
+        if (!$this->isValidAction($action)){
+            throw new NotValidActionException('Not valid action, cant perform an Action!');
+        }
+
+        if ($currentUserId <= 0){
+            throw new NotValidUserException('Not valid user id, cant perform an Action!');
+        }
+
         $availableActions = $this->getAvailableActions($this->status, $currentUserId);
 
-        foreach ($availableActions as $possibleAction){
+        foreach ($availableActions as $possibleAction) {
             if ($possibleAction == $action) {
                 $nextStatus = $this->getNextStatus($action);
                 if ($nextStatus) {
@@ -68,11 +93,53 @@ class Task
     }
 
     /**
+     * @param string $status
+     * @param int $currentUserId
+     * @return array
+     * @throws NotValidUserException
+     */
+    public function getAvailableActions(string $status, int $currentUserId): array
+    {
+        if (!$this->isValidStatus($status)){
+            throw new NotValidUserException('Not valid status, cant get Available actions!');
+        }
+
+        if ($currentUserId <= 0){
+            throw new NotValidUserException('Not valid user id, cant get Available actions!');
+        }
+
+        $actions = [];
+
+        if ($status === self::STATUS_NEW) {
+            $actions = [new AnswerAction(), new CancelAction()];
+        }
+
+        if ($status === self::STATUS_IN_WORK) {
+            $actions = [new CompleteAction(), new RefuseAction()];
+        }
+
+        $resultActions = [];
+
+        foreach ($actions as $action) {
+            if ($action->checkAccess($this->executorId, $this->clientId, $currentUserId)) {
+                $resultActions[] = $action;
+            }
+        }
+
+        return $resultActions;
+    }
+
+    /**
      * @param $action
      * @return string|null
+     * @throws NotValidActionException
      */
     public function getNextStatus(Action $action): ?string
     {
+        if (!$this->isValidAction($action)){
+            throw new NotValidActionException('Not valid action, cant get next Status!');
+        }
+
         if (!$this->status || !$action) {
             return null;
         }
@@ -98,26 +165,32 @@ class Task
         return null;
     }
 
-    public function getAvailableActions(string $status, int $currentUserId): array
+    /**
+     * @param string $status
+     * @return bool
+     */
+    private function isValidStatus(string $status): bool
     {
-        $actions = [];
+        return in_array($status, [
+            self::STATUS_NEW,
+            self::STATUS_FAILED,
+            self::STATUS_DONE,
+            self::STATUS_IN_WORK,
+            self::STATUS_CANCELED
+        ], true);
+    }
 
-        if ($status === self::STATUS_NEW) {
-            $actions = [new AnswerAction(), new CancelAction()];
-        }
-
-        if ($status === self::STATUS_IN_WORK) {
-            $actions = [new CompleteAction(), new RefuseAction()];
-        }
-
-        $resultActions = [];
-
-        foreach ($actions as $action) {
-            if ($action->checkAccess($this->executorId, $this->clientId, $currentUserId)) {
-                $resultActions[] = $action;
-            }
-        }
-
-        return $resultActions;
+    /**
+     * @param Action $action
+     * @return bool
+     */
+    private function isValidAction(Action $action): bool
+    {
+        return in_array($action, [
+            new RefuseAction(),
+            new CompleteAction(),
+            new CancelAction(),
+            new AnswerAction(),
+        ], false);
     }
 }
