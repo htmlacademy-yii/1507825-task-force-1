@@ -2,7 +2,9 @@
   "name": "tkonstantin/taskforce",
   "description": "html academy project",
   "type": "project",
-  "require": {},
+  "require": {
+    "ext-mysqli": "*"
+  },
   "autoload": {
     "psr-4": {
       "TaskForce\\": "src/"
