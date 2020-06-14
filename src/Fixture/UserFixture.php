@@ -77,13 +77,11 @@ class UserFixture extends Base
                 'sql_type' => 'string'
             ],
             [
-                'sql_field' => 'email',
-                'data_field' => 'email',
+                'field' => 'email',
                 'sql_type' => 'string'
             ],
             [
-                'sql_field' => 'password',
-                'data_field' => 'password',
+                'field' => 'password',
                 'sql_type' => 'string'
             ],
             [
@@ -92,8 +90,7 @@ class UserFixture extends Base
                 'sql_type' => 'date'
             ],
             [
-                'sql_field' => 'date_of_birth',
-                'data_field' => 'date_of_birth',
+                'field' => 'date_of_birth',
                 'sql_type' => 'date',
                 'default_value' => date('Y-m-d')
             ],
@@ -125,8 +122,7 @@ class UserFixture extends Base
 
         $mapping = [
             [
-                'sql_field' => 'name',
-                'data_field' => 'name',
+                'field' => 'name',
                 'sql_type' => 'string'
             ],
         ];
