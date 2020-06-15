@@ -5,8 +5,6 @@ namespace TaskForce\Tool\Data\Helper;
 
 
 use Exception;
-use http\Params;
-use mysqli;
 
 class RandomRecordSearcher
 {

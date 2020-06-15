@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use TaskForce\Fixture\CityFixture;
 use TaskForce\Tool\Data\Helper\EndlessConnection;
 
 use TaskForce\Fixture\UserFixture;
@@ -20,9 +21,21 @@ if ($ec->getLink() == false){
 }
 
 /**
- * What to fill
- * [categories, cities, opinions, users + user_role + user_contact_type + user_contact, feedback, tasks]
+ * @todo fill tables
+ * [
+ * categories,
+ * DONE: cities,
+ * opinions,
+ * DONE: users + user_role + user_contact_type + user_contact,
+ * feedback,
+ * tasks
+ * ]
  */
 
-$userFixture = new UserFixture($ec);
-$userFixture->run();
+//$userFixture = new UserFixture($ec);
+//echo $userFixture->getWholeSql();
+//$userFixture->run();
+
+//$cityFixture = new CityFixture($ec);
+//echo $cityFixture->getWholeSql();
+//$cityFixture->run();

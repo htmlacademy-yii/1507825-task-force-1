@@ -10,7 +10,7 @@ use TaskForce\Tool\Data\Helper\EndlessConnection;
 use TaskForce\Tool\Data\Helper\RandomRecordSearcher;
 use TaskForce\Tool\Data\Sql\Converter;
 
-class UserFixture extends Base
+class UserFixture extends Base implements ILogFixture
 {
 
     protected RandomRecordSearcher $searcher;
@@ -19,6 +19,18 @@ class UserFixture extends Base
     {
         parent::__construct($db);
         $this->searcher = new RandomRecordSearcher($db);
+    }
+
+    public function getWholeSql(): string
+    {
+        $queries = [
+            $this->getUserRoleSql(),
+            $this->getUserContactTypeSql(),
+            $this->getUserSql(),
+            $this->getUserContactSql()
+        ];
+
+        return implode("\n", $queries);
     }
 
     public function run(): void
@@ -173,4 +185,5 @@ class UserFixture extends Base
             return $contact;
         });
     }
+
 }
