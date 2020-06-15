@@ -37,12 +37,12 @@ if ($ec->getLink() == false){
  */
 
 $fixtures = [
-    new CityFixture($ec),
-    new CategoryFixture($ec),
-    new UserFixture($ec),
-    new TaskFixture($ec),
-    new FeedbackFixture($ec),
-    new AnswerFixture($ec)
+    'city' => new CityFixture($ec),
+    'category' => new CategoryFixture($ec),
+    'user' => new UserFixture($ec),
+    'task' => new TaskFixture($ec),
+    'feedback' => new FeedbackFixture($ec),
+    'answer' => new AnswerFixture($ec)
 ];
 
 /**
@@ -50,20 +50,22 @@ $fixtures = [
  */
 $shouldRun = false;
 
-$wholeSql = '';
-
-foreach ($fixtures as $fixture){
+$dumpIndex = 0;
+foreach ($fixtures as $entity => $fixture){
+    $dumpIndex++;
     if ($shouldRun && $fixture instanceof \TaskForce\Fixture\Base){
         $fixture->run();
     }
     if ($fixture instanceof \TaskForce\Fixture\ILogFixture){
-        $wholeSql .= $fixture->getWholeSql();
+        $wholeSql = $fixture->getWholeSql();
+
+        $f = fopen(DOCUMENT_ROOT . '/dumps/'.$dumpIndex.'.'.$entity.'.sql', 'w');
+        fwrite($f, $wholeSql);
+        fclose($f);
     }
 }
 
-$f = fopen(DOCUMENT_ROOT . '/dump.sql', 'w');
-fwrite($f, $wholeSql);
-fclose($f);
+
 
 
 
