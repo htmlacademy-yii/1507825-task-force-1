@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use TaskForce\Fixture\AnswerFixture;
 use TaskForce\Fixture\CategoryFixture;
 use TaskForce\Fixture\CityFixture;
+use TaskForce\Fixture\FeedbackFixture;
 use TaskForce\Fixture\TaskFixture;
 use TaskForce\Tool\Data\Helper\EndlessConnection;
 
@@ -34,20 +36,34 @@ if ($ec->getLink() == false){
  * ]
  */
 
-//$cityFixture = new CityFixture($ec);
-//echo $cityFixture->getWholeSql();
-//$cityFixture->run();
+$fixtures = [
+    new CityFixture($ec),
+    new CategoryFixture($ec),
+    new UserFixture($ec),
+    new TaskFixture($ec),
+    new FeedbackFixture($ec),
+    new AnswerFixture($ec)
+];
 
-//$categoryFixture = new CategoryFixture($ec);
-//echo $categoryFixture->getWholeSql();
-//$categoryFixture->run();
+/**
+ * Set true only to fill completely empty DB!!!
+ */
+$shouldRun = false;
 
-//$userFixture = new UserFixture($ec);
-//echo $userFixture->getWholeSql();
-//$userFixture->run();
+$wholeSql = '';
 
-//$taskFixture = new TaskFixture($ec);
-//echo $taskFixture->getWholeSql();
-//$taskFixture->run();
+foreach ($fixtures as $fixture){
+    if ($shouldRun && $fixture instanceof \TaskForce\Fixture\Base){
+        $fixture->run();
+    }
+    if ($fixture instanceof \TaskForce\Fixture\ILogFixture){
+        $wholeSql .= $fixture->getWholeSql();
+    }
+}
+
+$f = fopen(DOCUMENT_ROOT . '/dump.sql', 'w');
+fwrite($f, $wholeSql);
+fclose($f);
+
 
 
