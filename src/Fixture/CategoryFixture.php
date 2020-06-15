@@ -3,10 +3,6 @@
 
 namespace TaskForce\Fixture;
 
-
-use TaskForce\Tool\Data\Csv\Reader;
-use TaskForce\Tool\Data\Sql\Converter;
-
 class CategoryFixture extends Base implements ILogFixture
 {
 

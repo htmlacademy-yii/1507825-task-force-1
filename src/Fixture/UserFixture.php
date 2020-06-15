@@ -4,11 +4,8 @@
 namespace TaskForce\Fixture;
 
 
-use mysqli;
-use TaskForce\Tool\Data\Csv\Reader;
 use TaskForce\Tool\Data\Helper\EndlessConnection;
 use TaskForce\Tool\Data\Helper\RandomRecordSearcher;
-use TaskForce\Tool\Data\Sql\Converter;
 
 class UserFixture extends Base implements ILogFixture
 {

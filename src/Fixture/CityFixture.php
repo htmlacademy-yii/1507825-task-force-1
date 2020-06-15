@@ -4,9 +4,6 @@
 namespace TaskForce\Fixture;
 
 
-use TaskForce\Tool\Data\Csv\Reader;
-use TaskForce\Tool\Data\Sql\Converter;
-
 class CityFixture extends Base implements ILogFixture
 {
 
