@@ -22,13 +22,13 @@ class TaskFixture extends Base implements ILogFixture
 
     public function run(): void
     {
-//        $sql = $this->getTaskStatusSql();
-//        $this->db->renew();
-//        if ($this->db->getlink()->multi_query($sql)){
-//            echo 'Task addition records were inserted!'."\n";
-//        } else {
-//            echo 'Error: '.$this->db->getlink()->error."\n";
-//        }
+        $sql = $this->getTaskStatusSql();
+        $this->db->renew();
+        if ($this->db->getlink()->multi_query($sql)){
+            echo 'Task addition records were inserted!'."\n";
+        } else {
+            echo 'Error: '.$this->db->getlink()->error."\n";
+        }
 
         $this->db->renew();
 
