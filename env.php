@@ -2,4 +2,5 @@
 
 declare(strict_types=1);
 
-const DOCUMENT_ROOT = __DIR__;
+global $DOCUMENT_ROOT;
+$DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'] ? : __DIR__;

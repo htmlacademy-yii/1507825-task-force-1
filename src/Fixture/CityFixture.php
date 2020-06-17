@@ -9,7 +9,6 @@ class CityFixture extends Base implements ILogFixture
 
     public function getSql(): string
     {
-        $filePath = DOCUMENT_ROOT . '/data/cities.csv';
         $tableName = 'city';
 
         $mapping = [
@@ -20,7 +19,7 @@ class CityFixture extends Base implements ILogFixture
             ],
         ];
 
-        return $this->readCsvAsSql($filePath, $tableName, $mapping);
+        return $this->readCsvAsSql($this->filePath, $tableName, $mapping);
     }
 
     public function getWholeSql(): string

@@ -57,7 +57,7 @@ class Reader
     protected function openFile(): SplFileObject
     {
         if (!file_exists($this->filePath)) {
-            throw new Exception('No such file!');
+            throw new Exception('No such file "' . $this->filePath . '"!');
         }
 
         $fileObject = null;

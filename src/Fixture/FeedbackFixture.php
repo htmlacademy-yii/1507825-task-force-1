@@ -10,17 +10,8 @@ use TaskForce\Tool\Data\Helper\RandomRecordSearcher;
 class FeedbackFixture extends Base implements ILogFixture
 {
 
-    private RandomRecordSearcher $searcher;
-
-    public function __construct(EndlessConnection $db)
-    {
-        parent::__construct($db);
-        $this->searcher = new RandomRecordSearcher($db);
-    }
-
     public function getSql(): string
     {
-        $filePath = DOCUMENT_ROOT . '/data/opinions.csv';
         $tableName = 'feedback';
 
         $mapping = [
@@ -51,7 +42,7 @@ class FeedbackFixture extends Base implements ILogFixture
 
         $searcher = $this->searcher;
 
-        return $this->readCsvAsSql($filePath, $tableName, $mapping, static function($feedback) use ($searcher){
+        return $this->readCsvAsSql($this->filePath, $tableName, $mapping, static function($feedback) use ($searcher){
             $task = $searcher->getOne('task');
             $user = $searcher->getOne('user');
 

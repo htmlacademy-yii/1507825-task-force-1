@@ -10,12 +10,25 @@ use TaskForce\Tool\Data\Helper\RandomRecordSearcher;
 class UserFixture extends Base implements ILogFixture
 {
 
-    protected RandomRecordSearcher $searcher;
+    private $roleFilePath;
+    private $contactTypeFilePath;
+    private $contactFilePath;
 
-    public function __construct(EndlessConnection $db)
+    public function __construct(EndlessConnection $db, string $filePath, array $additionFiles)
     {
-        parent::__construct($db);
-        $this->searcher = new RandomRecordSearcher($db);
+        parent::__construct($db, $filePath);
+        if (!isset($additionFiles['role'])){
+            throw new \Exception('You should provide path to role data file!');
+        }
+        if (!isset($additionFiles['contact_type'])){
+            throw new \Exception('You should provide path to contact_type data file!');
+        }
+        if (!isset($additionFiles['contact'])){
+            throw new \Exception('You should provide path to contact data file!');
+        }
+        $this->roleFilePath = $additionFiles['role'];
+        $this->contactTypeFilePath = $additionFiles['contact_type'];
+        $this->contactFilePath = $additionFiles['contact'];
     }
 
     public function getWholeSql(): string
@@ -33,6 +46,7 @@ class UserFixture extends Base implements ILogFixture
     public function run(): void
     {
         $sql = $this->getSql();
+        $this->db->renew();
         if ($this->db->getlink()->multi_query($sql)){
             echo 'User addition records were inserted!'."\n";
         } else {
@@ -71,7 +85,6 @@ class UserFixture extends Base implements ILogFixture
 
     protected function getUserSql(): string
     {
-        $filePath = DOCUMENT_ROOT . '/data/users.csv';
         $tableName = 'user';
 
         $mapping = [
@@ -111,7 +124,7 @@ class UserFixture extends Base implements ILogFixture
 
         $searcher = $this->searcher;
 
-        return $this->readCsvAsSql($filePath, $tableName, $mapping, static function ($record) use ($searcher){
+        return $this->readCsvAsSql($this->filePath, $tableName, $mapping, static function ($record) use ($searcher){
             $nameParts = explode(' ', $record['name']);
             $record['name1'] = $nameParts[0];
             $record['name2'] = $nameParts[1];
@@ -125,8 +138,8 @@ class UserFixture extends Base implements ILogFixture
         });
     }
 
-    private function getUserRoleSql(){
-        $filePath = DOCUMENT_ROOT . '/data/user_role.csv';
+    private function getUserRoleSql(): string
+    {
         $tableName = 'user_role';
 
         $mapping = [
@@ -136,11 +149,11 @@ class UserFixture extends Base implements ILogFixture
             ],
         ];
 
-        return $this->readCsvAsSql($filePath, $tableName, $mapping);
+        return $this->readCsvAsSql($this->roleFilePath, $tableName, $mapping);
     }
 
-    private function getUserContactTypeSql(){
-        $filePath = DOCUMENT_ROOT . '/data/user_contact_type.csv';
+    private function getUserContactTypeSql(): string
+    {
         $tableName = 'user_contact_type';
 
         $mapping = [
@@ -150,11 +163,11 @@ class UserFixture extends Base implements ILogFixture
             ],
         ];
 
-        return $this->readCsvAsSql($filePath, $tableName, $mapping);
+        return $this->readCsvAsSql($this->contactTypeFilePath, $tableName, $mapping);
     }
 
-    private function getUserContactSql(){
-        $filePath = DOCUMENT_ROOT . '/data/user_contact.csv';
+    private function getUserContactSql(): string
+    {
         $tableName = 'user_contact';
 
         $mapping = [
@@ -174,7 +187,8 @@ class UserFixture extends Base implements ILogFixture
 
         $searcher = $this->searcher;
 
-        return $this->readCsvAsSql($filePath, $tableName, $mapping, static function ($contact) use ($searcher){
+        return $this->readCsvAsSql($this->contactFilePath, $tableName, $mapping, static function ($contact) use
+        ($searcher){
             $user = $searcher->getOne('user');
             $contactType = $searcher->getOne('user_contact_type');
             $contact['user'] = $user['id'];

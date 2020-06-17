@@ -23,6 +23,7 @@ class RandomRecordSearcher
      */
     public function getOne(string $tableName): array
     {
+        $this->link->renew();
         $tableName = preg_replace('/\s+/', '', $tableName);
         $sql = "SELECT * FROM `$tableName` ORDER BY RAND() LIMIT 1;";
 

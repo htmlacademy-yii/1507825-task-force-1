@@ -8,20 +8,26 @@ use Closure;
 use mysqli;
 use TaskForce\Tool\Data\Csv\Reader;
 use TaskForce\Tool\Data\Helper\EndlessConnection;
+use TaskForce\Tool\Data\Helper\RandomRecordSearcher;
 use TaskForce\Tool\Data\Sql\Converter;
 
 abstract class Base
 {
     protected EndlessConnection $db;
+    protected RandomRecordSearcher $searcher;
+    protected string $filePath;
 
-    public function __construct(EndlessConnection $db)
+    public function __construct(EndlessConnection $db, string $filePath)
     {
+        $this->filePath = $filePath;
         $this->db = $db;
+        $this->searcher = new RandomRecordSearcher($db);
     }
 
     public function run(): void
     {
         $sql = $this->getSql();
+        $this->db->renew();
         if ($this->db->getlink()->multi_query($sql)){
             echo 'Records were inserted!'."\n";
         } else {

@@ -9,23 +9,26 @@ use TaskForce\Tool\Data\Helper\RandomRecordSearcher;
 
 class TaskFixture extends Base implements ILogFixture
 {
+    private $statusFilePath;
 
-    private RandomRecordSearcher $searcher;
-
-    public function __construct(EndlessConnection $db)
+    public function __construct(EndlessConnection $db, string $filePath, array $additionFiles)
     {
-        parent::__construct($db);
-        $this->searcher = new RandomRecordSearcher($db);
+        parent::__construct($db, $filePath);
+        if (!isset($additionFiles['status'])){
+            throw new \Exception('You should provide path to status data file!');
+        }
+        $this->statusFilePath = $additionFiles['status'];
     }
 
     public function run(): void
     {
-        $sql = $this->getTaskStatusSql();
-        if ($this->db->getlink()->multi_query($sql)){
-            echo 'Task addition records were inserted!'."\n";
-        } else {
-            echo 'Error: '.$this->db->getlink()->error."\n";
-        }
+//        $sql = $this->getTaskStatusSql();
+//        $this->db->renew();
+//        if ($this->db->getlink()->multi_query($sql)){
+//            echo 'Task addition records were inserted!'."\n";
+//        } else {
+//            echo 'Error: '.$this->db->getlink()->error."\n";
+//        }
 
         $this->db->renew();
 
@@ -39,7 +42,6 @@ class TaskFixture extends Base implements ILogFixture
 
     public function getSql(): string
     {
-        $filePath = DOCUMENT_ROOT . '/data/tasks.csv';
         $tableName = 'task';
 
         $mapping = [
@@ -101,7 +103,7 @@ class TaskFixture extends Base implements ILogFixture
 
         $searcher = $this->searcher;
 
-        return $this->readCsvAsSql($filePath, $tableName, $mapping, static function ($task) use ($searcher){
+        return $this->readCsvAsSql($this->filePath, $tableName, $mapping, static function ($task) use ($searcher){
             $category = $searcher->getOne('category');
             $status = $searcher->getOne('task_status');
             $user1 = $searcher->getOne('user');
@@ -119,7 +121,6 @@ class TaskFixture extends Base implements ILogFixture
     }
 
     private function getTaskStatusSql(){
-        $filePath = DOCUMENT_ROOT . '/data/status.csv';
         $tableName = 'task_status';
 
         $mapping = [
@@ -129,7 +130,7 @@ class TaskFixture extends Base implements ILogFixture
             ],
         ];
 
-        return $this->readCsvAsSql($filePath, $tableName, $mapping);
+        return $this->readCsvAsSql($this->statusFilePath, $tableName, $mapping);
     }
 
     public function getWholeSql(): string

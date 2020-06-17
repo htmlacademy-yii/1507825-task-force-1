@@ -8,7 +8,6 @@ class CategoryFixture extends Base implements ILogFixture
 
     public function getSql(): string
     {
-        $filePath = DOCUMENT_ROOT . '/data/categories.csv';
         $tableName = 'category';
 
         $mapping = [
@@ -18,7 +17,7 @@ class CategoryFixture extends Base implements ILogFixture
             ],
         ];
 
-        return $this->readCsvAsSql($filePath, $tableName, $mapping);
+        return $this->readCsvAsSql($this->filePath, $tableName, $mapping);
     }
 
     public function getWholeSql(): string

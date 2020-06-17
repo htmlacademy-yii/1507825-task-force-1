@@ -15,6 +15,8 @@ use TaskForce\Fixture\UserFixture;
 include_once('../vendor/autoload.php');
 include_once('../env.php');
 
+global $DOCUMENT_ROOT;
+
 $ec = new EndlessConnection('localhost:3306', 'root', 'root', 'taskforce');
 
 if ($ec->getLink() == false){
@@ -37,12 +39,18 @@ if ($ec->getLink() == false){
  */
 
 $fixtures = [
-    'city' => new CityFixture($ec),
-    'category' => new CategoryFixture($ec),
-    'user' => new UserFixture($ec),
-    'task' => new TaskFixture($ec),
-    'feedback' => new FeedbackFixture($ec),
-    'answer' => new AnswerFixture($ec)
+    'city' => new CityFixture($ec, $DOCUMENT_ROOT . '/data/cities.csv'),
+    'category' => new CategoryFixture($ec, $DOCUMENT_ROOT . '/data/categories.csv'),
+    'user' => new UserFixture($ec, $DOCUMENT_ROOT . '/data/users.csv', [
+        'role' => $DOCUMENT_ROOT . '/data/user_role.csv',
+        'contact_type' => $DOCUMENT_ROOT . '/data/user_contact_type.csv',
+        'contact' => $DOCUMENT_ROOT . '/data/user_contact.csv'
+    ]),
+    'task' => new TaskFixture($ec, $DOCUMENT_ROOT . '/data/tasks.csv', [
+        'status' => $DOCUMENT_ROOT . '/data/status.csv'
+    ]),
+    'feedback' => new FeedbackFixture($ec, $DOCUMENT_ROOT . '/data/opinions.csv'),
+    'answer' => new AnswerFixture($ec, $DOCUMENT_ROOT . '/data/replies.csv')
 ];
 
 /**
@@ -59,7 +67,7 @@ foreach ($fixtures as $entity => $fixture){
     if ($fixture instanceof \TaskForce\Fixture\ILogFixture){
         $wholeSql = $fixture->getWholeSql();
 
-        $f = fopen(DOCUMENT_ROOT . '/dumps/'.$dumpIndex.'.'.$entity.'.sql', 'w');
+        $f = fopen($DOCUMENT_ROOT . '/dumps/'.$dumpIndex.'.'.$entity.'.sql', 'w');
         fwrite($f, $wholeSql);
         fclose($f);
     }
