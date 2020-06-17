@@ -42,7 +42,7 @@ try {
 
 
     foreach ($tests as $i => $test) {
-        echo ($i + 1) . ') test is ' . ($test ? 'successful' : 'failed') . '<br>';
+        echo ($i + 1) . ') test is ' . ($test ? 'successful' : 'failed') . "\n";
     }
 } catch (Exception $e) {
     echo 'Couldnt check tests: ' . $e->getMessage() . ', in ' . $e->getFile() . ':' . $e->getLine();
