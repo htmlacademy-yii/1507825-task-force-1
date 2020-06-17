@@ -4,4 +4,3 @@
 
 $this->title = 'TaskForce';
 ?>
-<div></div>
