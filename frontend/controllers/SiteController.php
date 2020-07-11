@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use app\models\User;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -74,7 +75,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $secondUser = User::findOne([
+            'id' => 2
+        ]);
+        return $this->render('index', ['user' => $secondUser]);
     }
 
     /**
