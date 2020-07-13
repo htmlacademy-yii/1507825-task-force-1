@@ -14,8 +14,8 @@ use Yii;
  * @property int $task
  * @property int $user
  *
- * @property Task $task0
- * @property User $user0
+ * @property Task $taskObject
+ * @property User $userObject
  */
 class Feedback extends \yii\db\ActiveRecord
 {
@@ -37,8 +37,8 @@ class Feedback extends \yii\db\ActiveRecord
             [['text'], 'string'],
             [['grade', 'task', 'user'], 'integer'],
             [['created_at'], 'safe'],
-            [['task'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task' => 'id']],
-            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user' => 'id']],
+            [['task'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task' => 'id']],
+            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user' => 'id']],
         ];
     }
 
@@ -58,22 +58,22 @@ class Feedback extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Task0]].
+     * Gets query for [[Task]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTask0()
+    public function getTask()
     {
-        return $this->hasOne(Task::className(), ['id' => 'task']);
+        return $this->hasOne(Task::class, ['id' => 'task']);
     }
 
     /**
-     * Gets query for [[User0]].
+     * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser0()
+    public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user']);
+        return $this->hasOne(User::class, ['id' => 'user']);
     }
 }

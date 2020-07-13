@@ -76,7 +76,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $secondUser = User::findOne([
-            'id' => 2
+            'id' => 14
         ]);
         return $this->render('index', ['user' => $secondUser]);
     }

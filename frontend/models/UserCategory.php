@@ -11,8 +11,8 @@ use Yii;
  * @property int $user
  * @property int $category
  *
- * @property Category $category0
- * @property User $user0
+ * @property Category $categoryObject
+ * @property User $userObject
  */
 class UserCategory extends \yii\db\ActiveRecord
 {
@@ -32,8 +32,8 @@ class UserCategory extends \yii\db\ActiveRecord
         return [
             [['user', 'category'], 'required'],
             [['user', 'category'], 'integer'],
-            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user' => 'id']],
-            [['category'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category' => 'id']],
+            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user' => 'id']],
+            [['category'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category' => 'id']],
         ];
     }
 
@@ -50,22 +50,22 @@ class UserCategory extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Category0]].
+     * Gets query for [[Category]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory0()
+    public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['id' => 'category']);
+        return $this->hasOne(Category::class, ['id' => 'category']);
     }
 
     /**
-     * Gets query for [[User0]].
+     * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser0()
+    public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user']);
+        return $this->hasOne(User::class, ['id' => 'user']);
     }
 }

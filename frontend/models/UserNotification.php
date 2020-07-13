@@ -12,8 +12,8 @@ use Yii;
  * @property int $type
  * @property int $is_on
  *
- * @property NotificationType $type0
- * @property User $user0
+ * @property NotificationType $typeObject
+ * @property User $userObject
  */
 class UserNotification extends \yii\db\ActiveRecord
 {
@@ -33,8 +33,8 @@ class UserNotification extends \yii\db\ActiveRecord
         return [
             [['user', 'type'], 'required'],
             [['user', 'type', 'is_on'], 'integer'],
-            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user' => 'id']],
-            [['type'], 'exist', 'skipOnError' => true, 'targetClass' => NotificationType::className(), 'targetAttribute' => ['type' => 'id']],
+            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user' => 'id']],
+            [['type'], 'exist', 'skipOnError' => true, 'targetClass' => NotificationType::class, 'targetAttribute' => ['type' => 'id']],
         ];
     }
 
@@ -52,22 +52,22 @@ class UserNotification extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Type0]].
+     * Gets query for [[Type]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getType0()
+    public function getType()
     {
-        return $this->hasOne(NotificationType::className(), ['id' => 'type']);
+        return $this->hasOne(NotificationType::class, ['id' => 'type']);
     }
 
     /**
-     * Gets query for [[User0]].
+     * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser0()
+    public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user']);
+        return $this->hasOne(User::class, ['id' => 'user']);
     }
 }

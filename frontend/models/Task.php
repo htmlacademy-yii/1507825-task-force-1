@@ -22,13 +22,13 @@ use Yii;
  * @property string $created_at
  *
  * @property Answer[] $answers
- * @property Category $category0
- * @property City $city0
- * @property User $client0
- * @property User $executor0
+ * @property Category $categoryObject
+ * @property City $cityObject
+ * @property User $clientObject
+ * @property User $executorObject
  * @property Feedback[] $feedbacks
  * @property Message[] $messages
- * @property TaskStatus $status0
+ * @property TaskStatus $statusObject
  * @property TaskFile[] $taskFiles
  */
 class Task extends \yii\db\ActiveRecord
@@ -53,11 +53,11 @@ class Task extends \yii\db\ActiveRecord
             [['date', 'created_at'], 'safe'],
             [['status', 'category', 'city', 'client', 'executor'], 'integer'],
             [['title'], 'string', 'max' => 255],
-            [['client'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['client' => 'id']],
-            [['executor'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['executor' => 'id']],
-            [['status'], 'exist', 'skipOnError' => true, 'targetClass' => TaskStatus::className(), 'targetAttribute' => ['status' => 'id']],
-            [['category'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category' => 'id']],
-            [['city'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city' => 'id']],
+            [['client'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['client' => 'id']],
+            [['executor'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['executor' => 'id']],
+            [['status'], 'exist', 'skipOnError' => true, 'targetClass' => TaskStatus::class, 'targetAttribute' => ['status' => 'id']],
+            [['category'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category' => 'id']],
+            [['city'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city' => 'id']],
         ];
     }
 
@@ -90,47 +90,47 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getAnswers()
     {
-        return $this->hasMany(Answer::className(), ['task' => 'id']);
+        return $this->hasMany(Answer::class, ['task' => 'id']);
     }
 
     /**
-     * Gets query for [[Category0]].
+     * Gets query for [[Category]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory0()
+    public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['id' => 'category']);
+        return $this->hasOne(Category::class, ['id' => 'category']);
     }
 
     /**
-     * Gets query for [[City0]].
+     * Gets query for [[City]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCity0()
+    public function getCity()
     {
-        return $this->hasOne(City::className(), ['id' => 'city']);
+        return $this->hasOne(City::class, ['id' => 'city']);
     }
 
     /**
-     * Gets query for [[Client0]].
+     * Gets query for [[Client]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getClient0()
+    public function getClient()
     {
-        return $this->hasOne(User::className(), ['id' => 'client']);
+        return $this->hasOne(User::class, ['id' => 'client']);
     }
 
     /**
-     * Gets query for [[Executor0]].
+     * Gets query for [[Executor]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getExecutor0()
+    public function getExecutor()
     {
-        return $this->hasOne(User::className(), ['id' => 'executor']);
+        return $this->hasOne(User::class, ['id' => 'executor']);
     }
 
     /**
@@ -140,7 +140,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getFeedbacks()
     {
-        return $this->hasMany(Feedback::className(), ['task' => 'id']);
+        return $this->hasMany(Feedback::class, ['task' => 'id']);
     }
 
     /**
@@ -150,17 +150,17 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getMessages()
     {
-        return $this->hasMany(Message::className(), ['task' => 'id']);
+        return $this->hasMany(Message::class, ['task' => 'id']);
     }
 
     /**
-     * Gets query for [[Status0]].
+     * Gets query for [[Status]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getStatus0()
+    public function getStatus()
     {
-        return $this->hasOne(TaskStatus::className(), ['id' => 'status']);
+        return $this->hasOne(TaskStatus::class, ['id' => 'status']);
     }
 
     /**
@@ -170,6 +170,6 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getTaskFiles()
     {
-        return $this->hasMany(TaskFile::className(), ['task' => 'id']);
+        return $this->hasMany(TaskFile::class, ['task' => 'id']);
     }
 }

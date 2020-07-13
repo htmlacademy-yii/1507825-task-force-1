@@ -11,8 +11,8 @@ use Yii;
  * @property int $task
  * @property int $file
  *
- * @property File $file0
- * @property Task $task0
+ * @property File $fileObject
+ * @property Task $taskObject
  */
 class TaskFile extends \yii\db\ActiveRecord
 {
@@ -32,8 +32,8 @@ class TaskFile extends \yii\db\ActiveRecord
         return [
             [['task', 'file'], 'required'],
             [['task', 'file'], 'integer'],
-            [['task'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task' => 'id']],
-            [['file'], 'exist', 'skipOnError' => true, 'targetClass' => File::className(), 'targetAttribute' => ['file' => 'id']],
+            [['task'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task' => 'id']],
+            [['file'], 'exist', 'skipOnError' => true, 'targetClass' => File::class, 'targetAttribute' => ['file' => 'id']],
         ];
     }
 
@@ -50,22 +50,22 @@ class TaskFile extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[File0]].
+     * Gets query for [[File]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFile0()
+    public function getFile()
     {
-        return $this->hasOne(File::className(), ['id' => 'file']);
+        return $this->hasOne(File::class, ['id' => 'file']);
     }
 
     /**
-     * Gets query for [[Task0]].
+     * Gets query for [[Task]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTask0()
+    public function getTask()
     {
-        return $this->hasOne(Task::className(), ['id' => 'task']);
+        return $this->hasOne(Task::class, ['id' => 'task']);
     }
 }

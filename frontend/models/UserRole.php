@@ -52,6 +52,6 @@ class UserRole extends \yii\db\ActiveRecord
      */
     public function getUsers()
     {
-        return $this->hasMany(User::className(), ['user_role' => 'id']);
+        return $this->hasMany(User::class, ['user_role' => 'id']);
     }
 }

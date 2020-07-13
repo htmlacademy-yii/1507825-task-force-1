@@ -14,8 +14,8 @@ use Yii;
  * @property string $text
  * @property int $recipient
  *
- * @property User $recipient0
- * @property NotificationType $type0
+ * @property User $recipientObject
+ * @property NotificationType $typeObject
  */
 class Notification extends \yii\db\ActiveRecord
 {
@@ -37,8 +37,8 @@ class Notification extends \yii\db\ActiveRecord
             [['executed', 'type', 'recipient'], 'integer'],
             [['type', 'text', 'recipient'], 'required'],
             [['text'], 'string'],
-            [['type'], 'exist', 'skipOnError' => true, 'targetClass' => NotificationType::className(), 'targetAttribute' => ['type' => 'id']],
-            [['recipient'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['recipient' => 'id']],
+            [['type'], 'exist', 'skipOnError' => true, 'targetClass' => NotificationType::class, 'targetAttribute' => ['type' => 'id']],
+            [['recipient'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['recipient' => 'id']],
         ];
     }
 
@@ -58,22 +58,22 @@ class Notification extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Recipient0]].
+     * Gets query for [[Recipient]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRecipient0()
+    public function getRecipient()
     {
-        return $this->hasOne(User::className(), ['id' => 'recipient']);
+        return $this->hasOne(User::class, ['id' => 'recipient']);
     }
 
     /**
-     * Gets query for [[Type0]].
+     * Gets query for [[Type]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getType0()
+    public function getType()
     {
-        return $this->hasOne(NotificationType::className(), ['id' => 'type']);
+        return $this->hasOne(NotificationType::class, ['id' => 'type']);
     }
 }

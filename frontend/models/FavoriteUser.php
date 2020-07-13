@@ -11,8 +11,8 @@ use Yii;
  * @property int $user
  * @property int $owner
  *
- * @property User $owner0
- * @property User $user0
+ * @property User $ownerObject
+ * @property User $userObject
  */
 class FavoriteUser extends \yii\db\ActiveRecord
 {
@@ -32,8 +32,8 @@ class FavoriteUser extends \yii\db\ActiveRecord
         return [
             [['user', 'owner'], 'required'],
             [['user', 'owner'], 'integer'],
-            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user' => 'id']],
-            [['owner'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['owner' => 'id']],
+            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user' => 'id']],
+            [['owner'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['owner' => 'id']],
         ];
     }
 
@@ -50,22 +50,22 @@ class FavoriteUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Owner0]].
+     * Gets query for [[Owner]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOwner0()
+    public function getOwner()
     {
-        return $this->hasOne(User::className(), ['id' => 'owner']);
+        return $this->hasOne(User::class, ['id' => 'owner']);
     }
 
     /**
-     * Gets query for [[User0]].
+     * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser0()
+    public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user']);
+        return $this->hasOne(User::class, ['id' => 'user']);
     }
 }

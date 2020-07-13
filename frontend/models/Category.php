@@ -5,21 +5,22 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "user_contact_type".
+ * This is the model class for table "category".
  *
  * @property int $id
  * @property string $name
  *
- * @property UserContact[] $userContacts
+ * @property Task[] $tasks
+ * @property UserCategory[] $userCategories
  */
-class UserContactType extends \yii\db\ActiveRecord
+class Category extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'user_contact_type';
+        return 'category';
     }
 
     /**
@@ -30,6 +31,7 @@ class UserContactType extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['name'], 'string', 'max' => 255],
+            [['name'], 'unique'],
         ];
     }
 
@@ -45,12 +47,22 @@ class UserContactType extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[UserContacts]].
+     * Gets query for [[Tasks]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUserContacts()
+    public function getTasks()
     {
-        return $this->hasMany(UserContact::class, ['type' => 'id']);
+        return $this->hasMany(Task::className(), ['category' => 'id']);
+    }
+
+    /**
+     * Gets query for [[UserCategories]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserCategories()
+    {
+        return $this->hasMany(UserCategory::className(), ['category' => 'id']);
     }
 }

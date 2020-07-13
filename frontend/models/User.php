@@ -24,15 +24,14 @@ use Yii;
  * @property int|null $show
  *
  * @property Answer[] $answers
- * @property File $avatar0
- * @property City $city0
+ * @property File $avatarObject
+ * @property City $cityObject
  * @property FavoriteUser[] $favoriteUsers
- * @property FavoriteUser[] $favoriteUsers0
  * @property Feedback[] $feedbacks
  * @property Message[] $messages
  * @property Notification[] $notifications
- * @property Task[] $tasks
- * @property Task[] $tasks0
+ * @property Task[] $ownedTasks
+ * @property Task[] $executingTasks
  * @property UserCategory[] $userCategories
  * @property UserContact[] $userContacts
  * @property UserFile[] $userFiles
@@ -62,9 +61,9 @@ class User extends \yii\db\ActiveRecord
             [['biography'], 'string'],
             [['email', 'first_name', 'last_name', 'password'], 'string', 'max' => 255],
             [['email'], 'unique'],
-            [['user_role'], 'exist', 'skipOnError' => true, 'targetClass' => UserRole::className(), 'targetAttribute' => ['user_role' => 'id']],
-            [['city'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city' => 'id']],
-            [['avatar'], 'exist', 'skipOnError' => true, 'targetClass' => File::className(), 'targetAttribute' => ['avatar' => 'id']],
+            [['user_role'], 'exist', 'skipOnError' => true, 'targetClass' => UserRole::class, 'targetAttribute' => ['user_role' => 'id']],
+            [['city'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city' => 'id']],
+            [['avatar'], 'exist', 'skipOnError' => true, 'targetClass' => File::class, 'targetAttribute' => ['avatar' => 'id']],
         ];
     }
 
@@ -99,27 +98,27 @@ class User extends \yii\db\ActiveRecord
      */
     public function getAnswers()
     {
-        return $this->hasMany(Answer::className(), ['user' => 'id']);
+        return $this->hasMany(Answer::class, ['user' => 'id']);
     }
 
     /**
-     * Gets query for [[Avatar0]].
+     * Gets query for [[Avatar]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getAvatar0()
+    public function getAvatar()
     {
-        return $this->hasOne(File::className(), ['id' => 'avatar']);
+        return $this->hasOne(File::class, ['id' => 'avatar']);
     }
 
     /**
-     * Gets query for [[City0]].
+     * Gets query for [[City]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCity0()
+    public function getCity()
     {
-        return $this->hasOne(City::className(), ['id' => 'city']);
+        return $this->hasOne(City::class, ['id' => 'city']);
     }
 
     /**
@@ -127,19 +126,9 @@ class User extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFavoriteUsers()
-    {
-        return $this->hasMany(FavoriteUser::className(), ['user' => 'id']);
-    }
-
-    /**
-     * Gets query for [[FavoriteUsers0]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFavoriteUsers0()
-    {
-        return $this->hasMany(FavoriteUser::className(), ['owner' => 'id']);
+    public function getFavoriteUsers() {
+        return $this->hasMany(User::class, ['id' => 'owner_id'])
+            ->viaTable('favorite_user', ['user_id' => 'id']);
     }
 
     /**
@@ -149,7 +138,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getFeedbacks()
     {
-        return $this->hasMany(Feedback::className(), ['user' => 'id']);
+        return $this->hasMany(Feedback::class, ['user' => 'id']);
     }
 
     /**
@@ -159,7 +148,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getMessages()
     {
-        return $this->hasMany(Message::className(), ['user' => 'id']);
+        return $this->hasMany(Message::class, ['user' => 'id']);
     }
 
     /**
@@ -169,7 +158,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getNotifications()
     {
-        return $this->hasMany(Notification::className(), ['recipient' => 'id']);
+        return $this->hasMany(Notification::class, ['recipient' => 'id']);
     }
 
     /**
@@ -177,19 +166,19 @@ class User extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTasks()
+    public function getOwnedTasks()
     {
-        return $this->hasMany(Task::className(), ['client' => 'id']);
+        return $this->hasMany(Task::class, ['client' => 'id']);
     }
 
     /**
-     * Gets query for [[Tasks0]].
+     * Gets query for [[Tasks]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTasks0()
+    public function getExecutingTasks()
     {
-        return $this->hasMany(Task::className(), ['executor' => 'id']);
+        return $this->hasMany(Task::class, ['executor' => 'id']);
     }
 
     /**
@@ -199,7 +188,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getUserCategories()
     {
-        return $this->hasMany(UserCategory::className(), ['user' => 'id']);
+        return $this->hasMany(UserCategory::class, ['user' => 'id']);
     }
 
     /**
@@ -209,7 +198,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getUserContacts()
     {
-        return $this->hasMany(UserContact::className(), ['user' => 'id']);
+        return $this->hasMany(UserContact::class, ['user' => 'id']);
     }
 
     /**
@@ -219,7 +208,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getUserFiles()
     {
-        return $this->hasMany(UserFile::className(), ['user' => 'id']);
+        return $this->hasMany(UserFile::class, ['user' => 'id']);
     }
 
     /**
@@ -229,7 +218,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getUserNotifications()
     {
-        return $this->hasMany(UserNotification::className(), ['user' => 'id']);
+        return $this->hasMany(UserNotification::class, ['user' => 'id']);
     }
 
     /**
@@ -239,6 +228,6 @@ class User extends \yii\db\ActiveRecord
      */
     public function getUserRole()
     {
-        return $this->hasOne(UserRole::className(), ['id' => 'user_role']);
+        return $this->hasOne(UserRole::class, ['id' => 'user_role']);
     }
 }

@@ -11,8 +11,8 @@ use Yii;
  * @property int $user
  * @property int $file
  *
- * @property File $file0
- * @property User $user0
+ * @property File $fileObject
+ * @property User $userObject
  */
 class UserFile extends \yii\db\ActiveRecord
 {
@@ -32,8 +32,8 @@ class UserFile extends \yii\db\ActiveRecord
         return [
             [['user', 'file'], 'required'],
             [['user', 'file'], 'integer'],
-            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user' => 'id']],
-            [['file'], 'exist', 'skipOnError' => true, 'targetClass' => File::className(), 'targetAttribute' => ['file' => 'id']],
+            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user' => 'id']],
+            [['file'], 'exist', 'skipOnError' => true, 'targetClass' => File::class, 'targetAttribute' => ['file' => 'id']],
         ];
     }
 
@@ -50,22 +50,22 @@ class UserFile extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[File0]].
+     * Gets query for [[File]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFile0()
+    public function getFile()
     {
-        return $this->hasOne(File::className(), ['id' => 'file']);
+        return $this->hasOne(File::class, ['id' => 'file']);
     }
 
     /**
-     * Gets query for [[User0]].
+     * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser0()
+    public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user']);
+        return $this->hasOne(User::class, ['id' => 'user']);
     }
 }

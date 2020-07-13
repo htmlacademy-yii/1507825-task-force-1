@@ -55,7 +55,7 @@ class File extends \yii\db\ActiveRecord
      */
     public function getTaskFiles()
     {
-        return $this->hasMany(TaskFile::className(), ['file' => 'id']);
+        return $this->hasMany(TaskFile::class, ['file' => 'id']);
     }
 
     /**
@@ -65,7 +65,7 @@ class File extends \yii\db\ActiveRecord
      */
     public function getUserFiles()
     {
-        return $this->hasMany(UserFile::className(), ['file' => 'id']);
+        return $this->hasMany(UserFile::class, ['file' => 'id']);
     }
 
     /**
@@ -75,6 +75,6 @@ class File extends \yii\db\ActiveRecord
      */
     public function getUsers()
     {
-        return $this->hasMany(User::className(), ['avatar' => 'id']);
+        return $this->hasMany(User::class, ['avatar' => 'id']);
     }
 }

@@ -12,8 +12,8 @@ use Yii;
  * @property int $user
  * @property string $value
  *
- * @property UserContactType $type0
- * @property User $user0
+ * @property UserContactType $typeObject
+ * @property User $userObject
  */
 class UserContact extends \yii\db\ActiveRecord
 {
@@ -34,8 +34,8 @@ class UserContact extends \yii\db\ActiveRecord
             [['type', 'user', 'value'], 'required'],
             [['type', 'user'], 'integer'],
             [['value'], 'string', 'max' => 255],
-            [['type'], 'exist', 'skipOnError' => true, 'targetClass' => UserContactType::className(), 'targetAttribute' => ['type' => 'id']],
-            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user' => 'id']],
+            [['type'], 'exist', 'skipOnError' => true, 'targetClass' => UserContactType::class, 'targetAttribute' => ['type' => 'id']],
+            [['user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user' => 'id']],
         ];
     }
 
@@ -53,22 +53,22 @@ class UserContact extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Type0]].
+     * Gets query for [[Type]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getType0()
+    public function getType()
     {
-        return $this->hasOne(UserContactType::className(), ['id' => 'type']);
+        return $this->hasOne(UserContactType::class, ['id' => 'type']);
     }
 
     /**
-     * Gets query for [[User0]].
+     * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser0()
+    public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user']);
+        return $this->hasOne(User::class, ['id' => 'user']);
     }
 }

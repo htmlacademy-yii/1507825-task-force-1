@@ -52,7 +52,7 @@ class NotificationType extends \yii\db\ActiveRecord
      */
     public function getNotifications()
     {
-        return $this->hasMany(Notification::className(), ['type' => 'id']);
+        return $this->hasMany(Notification::class, ['type' => 'id']);
     }
 
     /**
@@ -62,6 +62,6 @@ class NotificationType extends \yii\db\ActiveRecord
      */
     public function getUserNotifications()
     {
-        return $this->hasMany(UserNotification::className(), ['type' => 'id']);
+        return $this->hasMany(UserNotification::class, ['type' => 'id']);
     }
 }
